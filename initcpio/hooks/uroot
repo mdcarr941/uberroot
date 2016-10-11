@@ -1,0 +1,31 @@
+#!/bin/ash
+
+run_hook() {
+  if [ -z "${uroot}" ]; then
+    return
+  fi
+
+  root=$(resolve_device "${root}")
+
+  fsck_root() {
+    echo &>/dev/null
+  }
+
+# if [ "$cryptkey" ]; then
+#    keydev=$(resolve_device "${cryptkey%%:*}")
+# fi;
+
+  poll_device "$root" 20;
+  "$mount_handler" /lroot;
+
+  mem_size=$(free -m | awk '/Mem/ {print int($2)}');
+  mount -t tmpfs -o size=$(( $mem_size / 6 ))M tmpfs /uroot
+  unset mem_size;
+  mkdir /uroot/upper /uroot/work;
+
+  uroot_mount() {
+    mount -t overlay -o lowerdir=/lroot,upperdir=/uroot/upper,workdir=/uroot/work overlay "$1"
+  }
+
+  mount_handler=uroot_mount
+}

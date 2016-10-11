@@ -1,0 +1,15 @@
+#!/bin/ash
+
+build() {
+  add_dir /lroot
+  add_dir /uroot
+  add_binary free
+  add_runscript
+}
+
+help() {
+  cat <<HELPEOF
+This hoook overlays a tmpfs on top of root so that a read-only root filesystem
+is seen as read-write by the system.
+HELPEOF
+}
