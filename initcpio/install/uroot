@@ -4,6 +4,7 @@ build() {
   add_dir /lroot
   add_dir /uroot
   add_binary free
+  add_module overlay
   add_runscript
 }
 
